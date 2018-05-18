@@ -567,6 +567,7 @@ def parse_usb_id(id):
 # Read our arguments.
 parser = argparse.ArgumentParser(description='launcher for the fusee gelee exploit (by @ktemkin)')
 parser.add_argument('payload', metavar='payload', type=str, help='ARM payload to be launched; should be linked at 0x40010000')
+parser.add_argument('-r', dest='listen', action='store_true', help='keeps listening for usb comms after smashing the stack')
 parser.add_argument('-w', dest='wait', action='store_true', help='wait for an RCM connection if one isn\'t present')
 parser.add_argument('-V', metavar='vendor_id', dest='vid', type=parse_usb_id, default=None, help='overrides the TegraRCM vendor ID')
 parser.add_argument('-P', metavar='product_id', dest='pid', type=parse_usb_id, default=None, help='overrides the TegraRCM product ID')
@@ -683,3 +684,5 @@ except IOError:
     print("The USB device stopped responding-- sure smells like we've smashed its stack. :)")
     print("Launch complete!")
 
+if arguments.listen:
+    print(''.join(chr(i) for i in switch.read(1000)))
